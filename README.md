@@ -1,1 +1,1 @@
-# news-event-spatio-temporal-visualizer
+# sentiment-spatio-temporal-visualizer
