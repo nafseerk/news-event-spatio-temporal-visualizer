@@ -194,9 +194,12 @@ d3.csv("csv/182-29out-5min.csv", function(collection) {
 			// Add point to entity
 			entities[d.user].push(d.coordinates);
 		});
+		
+		/*
 		$("#countUsers").html(Object.keys(entities).length);
 		var timeDiff = range[1]-range[0];
 		$("#countTime").html(Math.floor(timeDiff / 1000 / 60 / 60));
+		*/
 		$('.inner').stop().fadeTo('slow', 1);
 		/*setTimeout(function() {
 			$('.inner').fadeTo('slow', 0.4);
