@@ -219,7 +219,6 @@ d3.csv("csv/182-29out-5min.csv", function(collection) {
 
 	// Pick up the SVG from the map object */
 	var svg = d3.select("#map").select("svg"),
-		mapTrails = svg.append("g"),
 		mapPoints = svg.append("g");
 
 	// Use Leaflet to implement a D3 geometric transformation.
@@ -252,16 +251,6 @@ d3.csv("csv/182-29out-5min.csv", function(collection) {
 		.attr("opacity", 1)
 		;
 
-	var trails = mapTrails
-		.selectAll("path")
-		.data(users)
-		.enter()
-		.append("path")
-		.attr("fill", "none")
-        .attr("stroke", function (d) { return d.color; })
-        .attr("stroke-width", 3)
-        ;
-
 	function render() {
 		pointers.attr("transform", function (d) {
 			var coordinates = entities[d.user];
@@ -272,14 +261,6 @@ d3.csv("csv/182-29out-5min.csv", function(collection) {
 					map.latLngToLayerPoint(header).y +")";
 			} else {
 				return "translate(-5,-5)";
-			}
-		});
-		trails.attr("d", function (d) {
-			var coordinates = entities[d.user];
-			if (coordinates && coordinates.length>0) {
-				return path({type: "LineString", coordinates: convertToArrayXY(coordinates)});
-			} else {
-				return "M0,0";
 			}
 		});
 	}
