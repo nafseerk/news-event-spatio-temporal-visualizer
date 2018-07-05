@@ -52,16 +52,6 @@ function print_filter(filter){
 	console.log(filter+"("+f.length+") = "+JSON.stringify(f).replace("[","[\n\t").replace(/}\,/g,"},\n\t").replace("]","\n]"));
 }
 
-function getRandomColor() {
-    var letters = '0123456789ABCDEF'.split('');
-    var color = '#';
-    for (var i = 0; i < 6; i++ ) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-}
-
-
 function getColorFromScore(score) {
 	score = parseInt(score)
 	switch(score) {
@@ -134,7 +124,7 @@ $("#slider").dateRangeSlider({
 	}]
 });
 
-d3.csv("csv/182-29out-5min.csv", function(collection) {
+d3.csv("csv/test_sentiment_scores.csv", function(collection) {
 
 	/*setTimeout(function () {
 		$('.inner').fadeTo('slow', 0.4);
@@ -162,7 +152,8 @@ d3.csv("csv/182-29out-5min.csv", function(collection) {
 		spatialPoints.push({
 			coordinates: new L.LatLng(d.lat, d.lng),
 			date: convertTimestampToUTCDate(d.timestamp),
-			user: parseInt(d.user)
+			tweet_id: parseInt(d.tweet_id),
+			score: parseInt(d.score)
 		});
 	});
 
@@ -177,22 +168,21 @@ d3.csv("csv/182-29out-5min.csv", function(collection) {
 	var spatial = crossfilter(spatialPoints),
 		all = spatial.groupAll(),
 		dateDimension = spatial.dimension(function (d) { return d.date; }),
-		usersDimension = spatial.dimension(function(d) { return d.user; }),
-		usersGroup = usersDimension.group(),
-		users = [];
+		tweetsDimension = spatial.dimension(function(d) { return d.tweet_id; }),
+		tweets = [];
 
-	getDistinctUsers();
+	getAllTweets();
 
 	function filterSpatialPointsWithRange(range) {
 		entities = {};
 		dateDimension.filterRange(range);
 		dateDimension.top(Infinity).forEach(function (d) {
 			// First time
-			if (!entities[d.user]) {
-				entities[d.user] = [];
+			if (!entities[d.tweet_id]) {
+				entities[d.tweet_id] = [];
 			}
 			// Add point to entity
-			entities[d.user].push(d.coordinates);
+			entities[d.tweet_id].push(d.coordinates);
 		});
 		
 		/*
@@ -206,9 +196,9 @@ d3.csv("csv/182-29out-5min.csv", function(collection) {
 		}, 1000);*/
 	}
 
-	function getDistinctUsers() {
-		usersGroup.top(Infinity).forEach(function (d) {
-			users.push({user: d.key, color: getRandomColor()});
+	function getAllTweets() {
+		tweetsDimension.top(Infinity).forEach(function (d) {
+			tweets.push({tweet_id: d.tweet_id, score: d.score});
 		});
 	}
 
@@ -257,11 +247,11 @@ d3.csv("csv/182-29out-5min.csv", function(collection) {
 
 	var pointers = mapPoints
 		.selectAll("circle")
-		.data(users)
+		.data(tweets)
 		.enter()
 		.append("circle")
 		.attr("r", 5)
-		.attr("fill", function (d) { return d.color; })
+		.attr("fill", function (d) { return getColorFromScore(d.score); })
 		.attr("fill-opacity", 1)
 		.attr("stroke", "black")
 		.attr("stroke-width", 2)
@@ -271,7 +261,7 @@ d3.csv("csv/182-29out-5min.csv", function(collection) {
 
 	function render() {
 		pointers.attr("transform", function (d) {
-			var coordinates = entities[d.user];
+			var coordinates = entities[d.tweet_id];
 			if (coordinates && coordinates.length>0) {
 				var header = coordinates[0];
 				return "translate("+
