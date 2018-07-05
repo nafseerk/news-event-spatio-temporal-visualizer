@@ -61,6 +61,21 @@ function getRandomColor() {
     return color;
 }
 
+
+function getColorFromScore(score) {
+	score = parseInt(score)
+	switch(score) {
+    	case -1:
+        	return "#FF0000"
+    	case 0:
+    		return "#808080"
+        case 1:
+        	return "#00FF00"	
+    	default:
+        	console.log("Invalid Sentiment Score. Cannot determine color");
+	}
+}
+
 //
 // Setup
 //
