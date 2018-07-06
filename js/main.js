@@ -6,7 +6,6 @@ $(document).ready(function(){
 
 var startDate,
 	endDate,
-	initialPosition,
 	spatialPoints = [],
 	entities = {};
 
@@ -74,7 +73,11 @@ minDate = formatDate("2008-10-01 00:00:00");
 maxDate = formatDate("2008-10-28 23:59:59");
 startDate = formatDate("2008-10-16 21:15:00");
 endDate = formatDate("2008-10-23 21:15:00");
-initialPosition = [39.94403, 116.407526]; // beijing
+
+// Map parameters
+var mapZoomLevel = 2; // 1 = Full World view 
+var initialPosition = [0, 0]; // (0, 0) is center of earth 
+
 
 //
 // Slider
@@ -210,7 +213,7 @@ d3.csv("csv/test_sentiment_scores.csv", function(collection) {
 	// MAP
 	//
 
-	var map = L.map('map').setView(initialPosition, 11),
+	var map = L.map('map').setView(initialPosition, mapZoomLevel),
 		maplink = L.tileLayer('http://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID}/normal.day.grey/{z}/{x}/{y}/256/png8?app_id={app_id}&app_code={app_code}', {
 					attribution: 'Map &copy; 1987-2014 <a href="http://developer.here.com">HERE</a>',
 					subdomains: '1234',
