@@ -22,6 +22,19 @@ function getColorFromScore(score) {
 	}
 }
 
+function getCircleRadius(curMapZoomLevel) {
+
+	if(curMapZoomLevel < 4) {
+		return 3
+	}else if(curMapZoomLevel < 7) {
+		return 4
+	}else if(curMapZoomLevel < 12) {
+		return 5
+	}else {
+		return 6
+	}
+}
+
 function convertTimestampToUTCDate(timestampInSeconds) {
 	var targetTime = new Date(timestampInSeconds*1000);
 	return new Date(targetTime.getUTCFullYear(), targetTime.getUTCMonth(), targetTime.getUTCDate(),  targetTime.getUTCHours(), targetTime.getUTCMinutes(), targetTime.getUTCSeconds());
@@ -32,7 +45,7 @@ function convertTimestampToUTCDate(timestampInSeconds) {
 ###################################################*/
  
 
-var mapZoomLevel = 2; // 1 = Full World view 
+var mapZoomLevel = 4; // 1 = Full World view 
 var initialPosition = [0, 0]; // (0, 0) is center of earth 
 
 var map = L.map('map').setView(initialPosition, mapZoomLevel),
@@ -45,7 +58,7 @@ var map = L.map('map').setView(initialPosition, mapZoomLevel),
 									app_code: 'AJKnXv84fjrb0KIHawS0Tg',
 									base: 'base',
 									minZoom: 0,
-									maxZoom: 18
+									maxZoom: 15
 							    }).addTo(map);
 
 // Initialize the SVG layer
@@ -187,7 +200,7 @@ d3.csv(data_file_path, function(collection) {
 		.data(tweets)
 		.enter()
 		.append("circle")
-		.attr("r", 5)
+		.attr("r", getCircleRadius(map.getZoom()))
 		.attr("fill", function (d) { return getColorFromScore(d.score); })
 		.attr("fill-opacity", 1)
 		.attr("stroke", "black")
@@ -208,6 +221,7 @@ d3.csv(data_file_path, function(collection) {
 				return "translate(-5,-5)";
 			}
 		});
+		pointers.attr("r", getCircleRadius(map.getZoom()))
 	}
 
 	function updateOnResize() {
