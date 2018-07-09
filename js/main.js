@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
 /*#################################################
-					Commons
+	              Commons
 ###################################################*/
 
 function formatDate(date) {
@@ -28,7 +28,7 @@ function convertTimestampToUTCDate(timestampInSeconds) {
 }
 
 /*#################################################
-					Map
+		         Map
 ###################################################*/
  
 
@@ -52,7 +52,7 @@ var map = L.map('map').setView(initialPosition, mapZoomLevel),
 map._initPathRoot();
 
 /*#################################################
-					D3
+		    D3
 ###################################################*/
 
 data_file_path = 'csv/2018-07-08_historic_parsed_scored.csv'
