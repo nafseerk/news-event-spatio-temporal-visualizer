@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>SIGR</title>
+        <title>Global Sentiment Analyzer</title>
 
         <!-- Styles -->
         <link href="css/leaflet.css" rel="stylesheet" type="text/css" />
@@ -63,7 +63,20 @@
 
               <div class="mastfoot">
                 <div id="slider"></div>
-                <div class="inner">  
+                <div>
+                  <table id="summary" class="table table-dark table-sm table-bordered table-fit" align="center">
+                    <caption style="padding: 5px;"><b>Summary</b></caption>
+                    <tbody>
+                      <tr>
+                        <td>Datapoints</td>
+                        <td id="total_points"></td>
+                      </tr>
+                      <tr>
+                        <td>Global perception</td>
+                        <td id="global_perception"></td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
 
@@ -74,24 +87,5 @@
         </div>
 
     </div>
-
-     <!-- Modal -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <h4 class="modal-title" id="myModalLabel">GeoLife Trajectory Dataset</h4>
-          </div>
-          <div class="modal-body" style="text-align: justify">
-            <p>This dataset of GPS trajectories was collected in the Geolife project from Microsoft Research Asia, by 182 users in a period of over three years (i.e., from April 2007 to August 2012). A GPS trajectory in this dataset is represented by a sequence of time-stamped points, each of which contains the information of latitude, longitude and altitude. The complete dataset contains 17,621 trajectories with a total distance of about 1.2 million kilometers and a total duration of 48,000+ hours. Approximately 91 percent of the trajectories are logged in a dense representation, e.g. every 1~5 seconds or every 5~10 meters per point. The dataset recoded a broad range of users’ outdoor movements, including not only life routines like go home and go to work but also some entertainments and sports activities, such as shopping, sightseeing, dining, hiking, and cycling. There is portion of the dataset where each trajectory has a set of transportation mode labels, such as by driving, taking a bus, riding a bike and walking.</p>
-            <p>More information at <a href="http://research.microsoft.com/apps/pubs/?id=141896" target="_blank">http://research.microsoft.com/apps/pubs/?id=141896</a></p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-
     </body>
 </html>

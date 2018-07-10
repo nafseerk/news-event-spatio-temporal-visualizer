@@ -1,5 +1,7 @@
 $(document).ready(function(){
 
+$(".table").hide();
+
 /*#################################################
 	              Commons
 ###################################################*/
@@ -45,7 +47,7 @@ function convertTimestampToUTCDate(timestampInSeconds) {
 ###################################################*/
  
 
-var mapZoomLevel = 4; // 1 = Full World view 
+var mapZoomLevel = 2; // 2 = Full World view 
 var initialPosition = [0, 0]; // (0, 0) is center of earth 
 
 var map = L.map('map').setView(initialPosition, mapZoomLevel),
@@ -152,6 +154,26 @@ d3.csv(data_file_path, function(collection) {
 		all = spatial.groupAll(),
 		dateDimension = spatial.dimension(function (d) { return d.date; }),
 		tweetsDimension = spatial.dimension(function(d) { return d.tweet_id; });
+
+	// Count total number of points
+	var n = all.reduceCount().value();
+	var global_score = all.reduceSum(function(d) { return d.score; }).value();
+	if(global_score > 0){
+		$("#global_perception").text('Positive')
+		$("#global_perception").css('color', 'green');
+	}
+	else if(global_score < 0){
+		$("#global_perception").text('Negative')
+		$("#global_perception").css('color', 'red');
+	}
+	else{
+		$("#global_perception").text('Positive')
+		$("#global_perception").css('color', 'black');
+	}
+
+
+	$("#total_points").text(n.toString())
+	$(".table").show();
 	
 	var tweets = [];
 	tweetsDimension.top(Infinity).forEach(function (d) {

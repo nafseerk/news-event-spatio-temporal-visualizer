@@ -26,6 +26,22 @@ html, body, .container, #map {
   margin: 0px;
 }
 
+table.table-bordered{
+    border:3px solid black;
+    margin-top:10px;
+  }
+table.table-bordered > thead > tr > th{
+    border:3px solid black;
+}
+table.table-bordered > tbody > tr > td{
+    border:3px solid black;
+}
+
+table.table-fit {
+    width: 1px;
+    white-space: nowrap;
+}
+
 #map {
   z-index: 0;
   width: 100%;
