@@ -157,23 +157,8 @@ d3.csv(data_file_path, function(collection) {
 
 	// Count total number of points
 	var n = all.reduceCount().value();
-	var global_score = all.reduceSum(function(d) { return d.score; }).value();
-	if(global_score > 0){
-		$("#global_perception").text('Positive')
-		$("#global_perception").css('color', 'green');
-	}
-	else if(global_score < 0){
-		$("#global_perception").text('Negative')
-		$("#global_perception").css('color', 'red');
-	}
-	else{
-		$("#global_perception").text('Positive')
-		$("#global_perception").css('color', 'black');
-	}
-
 
 	$("#total_points").text(n.toString())
-	$(".table").show();
 	
 	var tweets = [];
 	tweetsDimension.top(Infinity).forEach(function (d) {
@@ -200,7 +185,10 @@ d3.csv(data_file_path, function(collection) {
 	function filterSpatialPointsWithRange(range) {
 		entities = {};
 		dateDimension.filterRange(range);
+		var global_score = 0;
 		dateDimension.top(Infinity).forEach(function (d) {
+			global_score += d.score
+			
 			// First time
 			if (!entities[d.tweet_id]) {
 				entities[d.tweet_id] = [];
@@ -213,6 +201,20 @@ d3.csv(data_file_path, function(collection) {
 		/*setTimeout(function() {
 			$('.inner').fadeTo('slow', 0.4);
 		}, 1000);*/
+		if(global_score > 0){
+			$("#global_perception").text('Positive')
+			$("#global_perception").css('color', '#00FF00');
+		}
+		else if(global_score < 0){
+			$("#global_perception").text('Negative')
+			$("#global_perception").css('color', 'red');
+		}
+		else{
+			$("#global_perception").text('Positive')
+			$("#global_perception").css('color', 'black');
+		}
+
+		$(".table").show();
 	}
 
 	filterSpatialPointsWithRange([startDate, endDate]);
