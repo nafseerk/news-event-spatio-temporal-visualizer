@@ -70,7 +70,7 @@ map._initPathRoot();
 		    D3
 ###################################################*/
 
-data_file_path = 'csv/2018-07-08_historic_parsed_scored.csv'
+data_file_path = 'csv/TRADEWAR_2018-07-10_historic_filtered_parsed_scored.csv'
 
 d3.csv(data_file_path, function(collection) {
 
