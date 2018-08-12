@@ -111,7 +111,7 @@ d3.csv(data_file_path, function(collection) {
 			minutes: 5
 		},
 		formatter: function(val) {
-			var format = d3.time.format("%d %a. %H:%M");
+			var format = d3.time.format("%Y-%m-%d %H:%M");
 			return format(val);
 		},
 		scales: [{
