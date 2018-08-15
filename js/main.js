@@ -157,7 +157,6 @@ d3.csv(data_file_path, function(collection) {
 
 	// Count total number of points
 	var n = all.reduceCount().value();
-
 	$("#total_points").text(n.toString())
 	
 	var tweets = [];
@@ -182,20 +181,78 @@ d3.csv(data_file_path, function(collection) {
 	// Points
 	
 	var entities = {};
+	var aggregated_entities = {}
 	function filterSpatialPointsWithRange(range) {
 		entities = {};
+		aggregated_entities = {};
+		
+		// Filter the points in the time range
 		dateDimension.filterRange(range);
-		var global_score = 0;
+
 		dateDimension.top(Infinity).forEach(function (d) {
-			global_score += d.score
-			
+
 			// First time
 			if (!entities[d.tweet_id]) {
 				entities[d.tweet_id] = [];
 			}
+
 			// Add point to entity
 			entities[d.tweet_id].push(d.coordinates);
+		
+			// Aggregating the datapoints in the same location
+			if (!aggregated_entities[d.coordinates]) {
+				aggregated_entities[d.coordinates] = [d.score, undefined, undefined, undefined]
+			}else {
+				aggregated_entities[d.coordinates][0] = [parseInt(aggregated_entities[d.coordinates][0]) + d.score]
+			}
+
+			// Selection of a tweet_id to plot is hacky. 
+			if(d.score == -1){aggregated_entities[d.coordinates][1] = d.tweet_id}
+			else if(d.score == 0){aggregated_entities[d.coordinates][2] = d.tweet_id}
+			else if(d.score == 1){aggregated_entities[d.coordinates][3] = d.tweet_id}
+
 		});
+		
+		function addToEntities(tweet_id, coordinates) {
+			// First time
+			if (!entities[tweet_id]) {
+				entities[tweet_id] = [];
+			}
+
+			// Add point to entity
+			entities[tweet_id].push(coordinates);
+		}
+
+		function getLatLngFromString(location) { 
+			var latlang = location.replace(/[LatLng()]/g,''); 
+			var latlng = latlang.split(','); 
+			return new L.LatLng(latlng[0], latlng[1])
+		}
+
+		entities = {};
+		var global_score = 0;
+		for (var coordinate in aggregated_entities) {
+    		
+    		// skip loop if the property is from prototype
+    		if (!aggregated_entities.hasOwnProperty(coordinate)) continue;
+
+    		var total_score = aggregated_entities[coordinate][0];
+    		if(total_score < 0){
+    			addToEntities(aggregated_entities[coordinate][1], getLatLngFromString(coordinate))
+    			global_score -= 1
+    		}else if(total_score == 0) {
+    			addToEntities(aggregated_entities[coordinate][2], getLatLngFromString(coordinate))
+    		}else if(total_score > 0){
+    			global_score += 1
+    			addToEntities(aggregated_entities[coordinate][3], getLatLngFromString(coordinate))
+    		}
+
+		}
+		
+		// Number of points currently displayed
+		var plotted_count = Object.keys(entities).length
+		$("#plotted").text(plotted_count.toString())
+		
 		
 		$('.inner').stop().fadeTo('slow', 1);
 		/*setTimeout(function() {
@@ -210,7 +267,7 @@ d3.csv(data_file_path, function(collection) {
 			$("#global_perception").css('color', 'red');
 		}
 		else{
-			$("#global_perception").text('Positive')
+			$("#global_perception").text('Neutral')
 			$("#global_perception").css('color', 'black');
 		}
 
