@@ -9,6 +9,7 @@
         <link href="css/jquery.slider.ithing.css" rel="stylesheet" type="text/css" />
         <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <link href="css/main.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="build/css/countrySelect.css">
 
         <!-- jQuery -->
         <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
@@ -30,6 +31,9 @@
         <script src="js/bootstrap.min.js"></script>
 
         <!-- Main code -->
+        <script type="text/javascript">
+          var country_selected = 'all';
+        </script>
         <script src="js/main.js" type="text/javascript" charset="utf-8"></script>
 
     </head>
@@ -46,9 +50,31 @@
             <div class="cover-container">
 
               <div class="masthead clearfix">
+
                 <div class="inner"> 
                   <h1 class="masthead-brand">Sentiment Visualizer</h1>
                 </div>
+                <!-- Country Selector-->
+                <div style="float: right">
+                  <input type="text" id="country">
+                  <input type="hidden" id="country_code"/>
+                  <script src="build/js/countrySelect.min.js"></script>
+                  <script>
+                    var countryData = $.fn.countrySelect.getCountryData();
+                    countryData.unshift({name: "All countries", iso2: "all"});
+                    $.fn.countrySelect.setCountryData(countryData);
+                    $("#country").countrySelect({defaultCountry: "all", preferredCountries: []});
+
+
+                    /*$("#country").change(function(){  
+                      var countryData = $("#country").countrySelect("getSelectedCountryData");
+                      country_selected = countryData['iso2']
+                      
+                      // TODO - Add country select change event code here
+                    });*/
+                  </script>
+                </div>
+
                 <div class="inner">
                     <div class="loading">
                         <h4>Loading data, please wait ...</h4>
@@ -59,7 +85,6 @@
               </div>
 
               <div class="inner cover">
-
               </div>
 
               <div class="mastfoot">

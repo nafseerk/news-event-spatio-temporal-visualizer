@@ -70,8 +70,8 @@ map._initPathRoot();
 		    D3
 ###################################################*/
 
-data_file_path = 'csv/TRADEWAR_2018-07-10_historic_filtered_parsed_scored.csv'
-
+data_file_path = 'csv/test_data_with_country.csv'
+country_selected = 'all'
 d3.csv(data_file_path, function(collection) {
 
 	var spatialPoints = [];
@@ -85,12 +85,16 @@ d3.csv(data_file_path, function(collection) {
 		if(d.timestamp > maxDate){
 			maxDate = d.timestamp
 		}
-		spatialPoints.push({
-			tweet_id: parseInt(d.tweet_id),
-			coordinates: new L.LatLng(d.lat, d.lng),
-			date: convertTimestampToUTCDate(d.timestamp),
-			score: parseInt(d.score)
-		});
+		if(country_selected == 'all' || d.country_code == country_selected) {
+			spatialPoints.push({
+				tweet_id: parseInt(d.tweet_id),
+				coordinates: new L.LatLng(d.lat, d.lng),
+				date: convertTimestampToUTCDate(d.timestamp),
+				score: parseInt(d.score),
+				country: d.country_name,
+				country_code: d.country_code
+			});
+		}
 	});
 
 	var startDate = minDate;
