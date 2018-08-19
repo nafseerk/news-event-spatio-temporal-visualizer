@@ -71,7 +71,6 @@ map._initPathRoot();
 ###################################################*/
 
 data_file_path = 'csv/test_data_with_country.csv'
-country_selected = 'all'
 d3.csv(data_file_path, function(collection) {
 
 	var spatialPoints = [];

@@ -32,7 +32,13 @@
 
         <!-- Main code -->
         <script type="text/javascript">
-          var country_selected = 'all';
+          var country_selected;
+
+          if(sessionStorage.getItem('country_selected') != null) {
+            country_selected = sessionStorage.getItem('country_selected')
+          }else {
+            country_selected = 'all';
+          }
         </script>
         <script src="js/main.js" type="text/javascript" charset="utf-8"></script>
 
@@ -63,15 +69,14 @@
                     var countryData = $.fn.countrySelect.getCountryData();
                     countryData.unshift({name: "All countries", iso2: "all"});
                     $.fn.countrySelect.setCountryData(countryData);
-                    $("#country").countrySelect({defaultCountry: "all", preferredCountries: []});
+                    $("#country").countrySelect({defaultCountry: country_selected, preferredCountries: []});
 
 
-                    /*$("#country").change(function(){  
+                    $("#country").change(function(){  
                       var countryData = $("#country").countrySelect("getSelectedCountryData");
-                      country_selected = countryData['iso2']
-                      
-                      // TODO - Add country select change event code here
-                    });*/
+                      sessionStorage.setItem('country_selected', countryData['iso2'])
+                      window.location.reload()
+                    });
                   </script>
                 </div>
 
